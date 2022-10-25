@@ -21,7 +21,8 @@ export default class App extends Component {
   };
 
   handleSubmit = search => {
-    this.setState({ search });
+    // this.setState({ search });
+    this.setState({ search, page: 1, images: [] });
   };
 
   toggleModal = () => {
@@ -47,7 +48,7 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.search !== this.state.search) this.setState({ page: 1 });
+    // if (prevState.search !== this.state.search) this.setState({ page: 1 });
     if (
       prevState.search !== this.state.search ||
       prevState.page !== this.state.page
@@ -59,7 +60,8 @@ export default class App extends Component {
         .then(res => res.json())
         .then(images => {
           if (images.totalHits === 0) {
-            this.setState({ images: [], totalHits: 0 });
+            this.setState({ totalHits: 0 });
+            // this.setState({ images: [], totalHits: 0 });
             return Promise.reject(
               toast.error(`There is no image with name ${this.state.search}`)
             );
