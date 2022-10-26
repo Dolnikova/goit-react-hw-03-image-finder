@@ -6,6 +6,7 @@ import ImageGallery from './ImageSearch/ImageGallery/ImageGallery';
 import Searchbar from './ImageSearch/Searchbar';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
+import { fetchImages } from './api';
 
 export default class App extends Component {
   state = {
@@ -21,7 +22,6 @@ export default class App extends Component {
   };
 
   handleSubmit = search => {
-    // this.setState({ search });
     this.setState({ search, page: 1, images: [] });
   };
 
@@ -48,20 +48,15 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    // if (prevState.search !== this.state.search) this.setState({ page: 1 });
     if (
       prevState.search !== this.state.search ||
       prevState.page !== this.state.page
     ) {
       this.setState({ isLoading: true });
-      fetch(
-        `https://pixabay.com/api/?q=${this.state.search}&page=${this.state.page}&key=29818369-26f2aeadd77818b7a67304d74&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(res => res.json())
+      fetchImages(this.state.search, this.state.page)
         .then(images => {
           if (images.totalHits === 0) {
             this.setState({ totalHits: 0 });
-            // this.setState({ images: [], totalHits: 0 });
             return Promise.reject(
               toast.error(`There is no image with name ${this.state.search}`)
             );
